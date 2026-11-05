@@ -1,0 +1,56 @@
+/* Fieldstone Roofing & Exteriors — design tokens
+   Soltects Case Study 01. See docs/02-brand-strategy.md for rationale. */
+
+:root {
+  /* Color */
+  --ink: #1c2b2a;
+  --ink-soft: #3a4a48;
+  --ink-faint: #5c6b68;
+  --brick: #c1552e;
+  --brick-dark: #a1431f;
+  --brick-tint: #f1e1d7;
+  --paper: #f7f4ee;
+  --paper-raised: #ffffff;
+  --sage: #7c8c73;
+  --sage-tint: #e7ebe3;
+  --line: #dcd6c8;
+  --line-strong: #c3bca9;
+  --gold: #c99a3e;
+  --focus-ring: #2f6f6a;
+
+  /* Type */
+  --font-head: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
+  --font-body: "Inter", -apple-system, "Segoe UI", sans-serif;
+
+  --step--1: clamp(0.8rem, 0.78rem + 0.08vw, 0.875rem);
+  --step-0: clamp(1rem, 0.97rem + 0.12vw, 1.0625rem);
+  --step-1: clamp(1.15rem, 1.1rem + 0.25vw, 1.3125rem);
+  --step-2: clamp(1.35rem, 1.25rem + 0.4vw, 1.625rem);
+  --step-3: clamp(1.7rem, 1.5rem + 0.8vw, 2.1rem);
+  --step-4: clamp(2.1rem, 1.8rem + 1.4vw, 2.75rem);
+  --step-5: clamp(2.6rem, 2.1rem + 2.4vw, 3.6rem);
+
+  /* Space (8px baseline) */
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4.5rem;
+  --space-8: 6.5rem;
+
+  /* Layout */
+  --content-max: 76rem;
+  --prose-max: 42rem;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(28, 43, 42, 0.08);
+  --shadow-md: 0 8px 24px rgba(28, 43, 42, 0.12);
+  --shadow-lg: 0 20px 48px rgba(28, 43, 42, 0.18);
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+}

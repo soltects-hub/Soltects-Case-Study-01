@@ -1,0 +1,485 @@
+/* Fieldstone Roofing & Exteriors — base styles
+   Soltects Case Study 01 */
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body, h1, h2, h3, h4, p, figure, blockquote, dl, dd { margin: 0; }
+ul[class], ol[class] { margin: 0; padding: 0; list-style: none; }
+img, picture, svg { max-width: 100%; display: block; }
+input, button, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+
+html:focus-within { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ---------- Base ---------- */
+body {
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+h1 { font-size: var(--step-5); }
+h2 { font-size: var(--step-4); }
+h3 { font-size: var(--step-2); }
+h4 { font-size: var(--step-1); }
+
+p { max-width: var(--prose-max); }
+p + p { margin-top: var(--space-3); }
+
+a.link { color: var(--brick-dark); text-underline-offset: 3px; text-decoration-thickness: 1.5px; } /* --brick text on --paper is only 4.15:1, below AA; --brick-dark is 5.73:1 */
+a.link:hover { color: var(--brick-dark); }
+
+/* Visible, consistent focus state for keyboard users (WCAG 2.4.7) */
+a:focus-visible, button:focus-visible, input:focus-visible,
+textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  z-index: 1000;
+  transition: top var(--dur-fast) var(--ease);
+}
+.skip-link:focus { top: 1rem; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Layout helpers ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+}
+.section { padding-block: var(--space-7); }
+.section--tight { padding-block: var(--space-6); }
+@media (max-width: 640px) {
+  .section { padding-block: var(--space-6); }
+  .wrap { padding-inline: var(--space-3); }
+}
+
+.section--ink { background: var(--ink); color: var(--paper); }
+.section--ink h2, .section--ink h3 { color: var(--paper); }
+.section--ink .card h2, .section--ink .card h3 { color: var(--ink); } /* a light .card surface inside a dark section keeps dark heading text, not the section's own light-on-dark color */
+.section--sage { background: var(--sage-tint); }
+.section--raised { background: var(--paper-raised); }
+
+.grid { display: grid; gap: var(--space-5); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 860px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+
+.stack { display: flex; flex-direction: column; }
+.cluster { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.center-col { max-width: var(--prose-max); margin-inline: auto; text-align: center; }
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--step--1);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brick-dark); /* --brick itself is only 4.15:1 on --paper, below AA for this font size */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.section--ink .eyebrow { color: var(--gold); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  font-weight: 600;
+  font-size: var(--step-0);
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  min-height: 48px; /* touch target */
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--brick); color: #fff; }
+.btn-primary:hover { background: var(--brick-dark); }
+.btn-secondary { background: transparent; border-color: currentColor; color: var(--ink); }
+.btn-secondary:hover { background: var(--ink); color: var(--paper); }
+.section--ink .btn-secondary { color: var(--paper); }
+.section--ink .btn-secondary:hover { background: var(--paper); color: var(--ink); }
+.btn-ghost { background: transparent; color: var(--brick-dark); padding-inline: 0.25rem; }
+.btn-block { width: 100%; }
+.btn[href^="tel:"]::before { content: "\260E\FE0E"; font-size: 0.95em; }
+
+/* ---------- Header / Nav ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(247, 244, 238, 0.92);
+  backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-2);
+}
+.brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+.brand__mark { width: 34px; height: 34px; flex-shrink: 0; }
+.brand__name {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.brand__name small { display: block; font-family: var(--font-body); font-weight: 500; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  width: 44px; height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+.nav-toggle svg { width: 22px; height: 22px; }
+
+.primary-nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.primary-nav__list a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: var(--step--1);
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent;
+}
+.primary-nav__list a:hover,
+.primary-nav__list a[aria-current="page"] { border-color: var(--brick); color: var(--brick-dark); }
+
+.header-actions { display: flex; align-items: center; gap: var(--space-3); }
+.header-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  /* No-JS fallback: the toggle button does nothing without main.js, so it
+     stays hidden and the nav instead flows open, full-width, below the
+     header bar — still fully usable, just not a drawer. Once main.js adds
+     html.js, the drawer/overlay pattern below takes over. */
+  .site-header__bar { flex-wrap: wrap; }
+  .primary-nav { width: 100%; order: 3; }
+  .primary-nav__list { flex-direction: column; align-items: stretch; gap: 0; margin-top: var(--space-3); }
+  .primary-nav__list a { display: block; padding: 0.9rem 0; border-bottom: 1px solid var(--line); }
+
+  html.js .nav-toggle { display: inline-flex; }
+  html.js .site-header__bar { flex-wrap: nowrap; }
+  html.js .primary-nav {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(320px, 85vw);
+    order: initial;
+    background: var(--paper-raised);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-5) var(--space-4);
+    transform: translateX(100%);
+    transition: transform var(--dur-base) var(--ease);
+    overflow-y: auto;
+  }
+  html.js .primary-nav[data-open="true"] { transform: translateX(0); }
+  html.js .primary-nav__list { margin-top: var(--space-5); }
+  .nav-scrim {
+    position: fixed; inset: 0; background: rgba(28,43,42,0.4);
+    opacity: 0; pointer-events: none; transition: opacity var(--dur-base) var(--ease);
+    z-index: 90;
+  }
+  .nav-scrim[data-open="true"] { opacity: 1; pointer-events: auto; }
+  .header-phone span.header-phone__label { display: none; }
+}
+
+/* ---------- Sticky mobile call bar ---------- */
+.call-bar {
+  display: none;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 95;
+  background: var(--ink);
+  color: var(--paper);
+}
+.call-bar__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.call-bar a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 0.5rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: var(--step--1);
+  min-height: 52px;
+}
+.call-bar a:first-child { background: var(--brick); color: #fff; } /* --paper text on --brick is only 4.15:1 at this weight/size; pure white is 4.56:1 */
+.call-bar a:last-child { border-left: 1px solid rgba(247,244,238,0.25); }
+@media (max-width: 640px) {
+  .call-bar { display: block; }
+  body { padding-bottom: 52px; }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(170deg, var(--ink) 0%, #26393700 60%), var(--ink);
+  color: var(--paper);
+}
+.hero__art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.9;
+}
+.hero__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-6);
+  align-items: center;
+  padding-block: var(--space-8);
+}
+.hero h1 { color: #fff; }
+.hero p.lede { font-size: var(--step-1); color: #e6e6dd; max-width: 34rem; }
+.hero__badges { display: flex; gap: var(--space-4); margin-top: var(--space-5); flex-wrap: wrap; }
+.hero__badge { font-size: var(--step--1); color: #d8d8cc; display: flex; align-items: center; gap: 0.5em; }
+.hero__badge svg { width: 18px; height: 18px; color: var(--gold); }
+@media (max-width: 860px) {
+  .hero__grid { grid-template-columns: 1fr; padding-block: var(--space-6); }
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--paper-raised);
+  color: var(--ink); /* reset explicitly: cards are a light surface even inside .section--ink, which sets light text for its own background */
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+.card h3 { margin-bottom: var(--space-2); }
+.card--service { display: flex; flex-direction: column; gap: var(--space-2); height: 100%; }
+.card--service .icon { width: 44px; height: 44px; color: var(--brick); }
+.card--stat { text-align: center; }
+.card--stat .stat-num { font-family: var(--font-head); font-size: var(--step-3); color: var(--brick); display: block; }
+.card--stat .stat-label { font-size: var(--step--1); color: var(--ink-faint); }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  background: var(--sage-tint);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+
+/* ---------- Process steps ---------- */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); counter-reset: step; }
+.step { position: relative; padding-top: var(--space-5); }
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute; top: 0; left: 0;
+  width: 2.5rem; height: 2.5rem;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: var(--brick-tint);
+  color: var(--brick-dark);
+  font-family: var(--font-head);
+  font-weight: 700;
+}
+@media (max-width: 860px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }
+
+/* ---------- FAQ accordion ---------- */
+.accordion-item { border-bottom: 1px solid var(--line); }
+.accordion-trigger {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: var(--space-4) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-head);
+  font-size: var(--step-1);
+  font-weight: 600;
+}
+.accordion-trigger .chev { flex-shrink: 0; width: 20px; height: 20px; transition: transform var(--dur-base) var(--ease); }
+.accordion-trigger[aria-expanded="true"] .chev { transform: rotate(180deg); }
+/* Accordion panels are collapsed only once js.js has run (see the inline
+   script at the top of <body>). With JavaScript unavailable, every answer
+   stays fully visible and readable instead of being stuck closed. */
+.accordion-panel { overflow: hidden; transition: max-height var(--dur-base) var(--ease); }
+html:not(.js) .accordion-panel { max-height: none !important; }
+html.js .accordion-panel { max-height: 0; }
+html:not(.js) .accordion-trigger .chev { display: none; }
+.accordion-panel__inner { padding-bottom: var(--space-4); color: var(--ink-soft); }
+
+/* ---------- Forms ---------- */
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+@media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } }
+.field { display: flex; flex-direction: column; gap: 0.4rem; }
+.field--full { grid-column: 1 / -1; }
+.field label { font-weight: 600; font-size: var(--step--1); }
+.field .hint { font-size: var(--step--1); color: var(--ink-faint); }
+.field input, .field select, .field textarea {
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  background: var(--paper-raised);
+  min-height: 48px;
+}
+.field textarea { min-height: 120px; resize: vertical; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--focus-ring); }
+.field[data-invalid="true"] input,
+.field[data-invalid="true"] select,
+.field[data-invalid="true"] textarea { border-color: var(--brick-dark); }
+.field-error {
+  color: var(--brick-dark);
+  font-size: var(--step--1);
+  font-weight: 600;
+  display: none;
+}
+.field[data-invalid="true"] .field-error { display: block; }
+.fieldset-legend { font-family: var(--font-head); font-weight: 600; font-size: var(--step-1); margin-bottom: var(--space-2); }
+.radio-row { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+.radio-row label { display: flex; align-items: center; gap: 0.5em; font-weight: 500; }
+
+.form-status {
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  font-weight: 600;
+  display: none;
+}
+.form-status[data-state="success"] { display: block; background: var(--sage-tint); color: var(--ink); }
+.form-status[data-state="error"] { display: block; background: var(--brick-tint); color: var(--brick-dark); }
+
+/* ---------- Footer ---------- */
+.site-footer { background: var(--ink); color: #cfd6d2; }
+.site-footer a { text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+/* A link inline in a sentence (the "Soltects" credit) needs a non-color
+   cue at rest too, not just on hover — otherwise it's distinguishable from
+   surrounding text by color alone. Footer nav-list links don't need this:
+   each sits alone on its own line, already distinguishable by position. */
+.site-footer p a { text-decoration: underline; text-underline-offset: 2px; }
+.site-footer a.link { color: var(--gold); } /* --brick-dark on the dark footer background is only 2.33:1; --gold is 5.72:1 */
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: var(--space-5); padding-block: var(--space-7); }
+.footer-grid h3 { color: #fff; font-size: var(--step-0); margin-bottom: var(--space-3); }
+.footer-grid ul li { margin-bottom: 0.5rem; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-block: var(--space-4);
+  display: flex; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap;
+  font-size: var(--step--1); color: #9fada9;
+}
+.concept-banner {
+  background: var(--gold);
+  color: #2b2208;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.6rem var(--space-3);
+  font-size: var(--step--1);
+}
+.concept-banner a { color: #2b2208; text-decoration: underline; }
+@media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Misc content pages ---------- */
+.prose { max-width: var(--prose-max); }
+.prose h2 { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+.prose h3 { margin-top: var(--space-5); margin-bottom: var(--space-2); }
+.prose ul, .prose ol { padding-left: 1.3em; margin: var(--space-3) 0; }
+.prose li { margin-bottom: 0.5rem; }
+.prose li::marker { color: var(--brick); }
+
+.breadcrumbs { font-size: var(--step--1); color: var(--ink-faint); margin-bottom: var(--space-4); }
+.breadcrumbs a { color: var(--ink-faint); }
+.breadcrumbs a:hover { color: var(--brick-dark); }
+
+.page-banner { background: var(--ink); color: var(--paper); padding-block: var(--space-6); }
+.page-banner h1 { color: #fff; }
+.page-banner p { color: #d8d8cc; }
+
+/* Scroll-reveal is opt-in: only once main.js has confirmed it can run the
+   IntersectionObserver (html.js, set by the same inline script that gates
+   the nav/accordion enhancements) do items start hidden and wait to be
+   revealed. Without JS — or with reduced motion — content is visible
+   immediately, never gated behind a script that might not run. */
+html.js [data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
+html.js [data-reveal].is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+th, td { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--line); }
+th { font-family: var(--font-head); }

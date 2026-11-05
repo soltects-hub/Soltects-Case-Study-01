@@ -1,0 +1,10 @@
+{
+  "name": "fieldstone-demo-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Demo static file server + form intake API for the Fieldstone Roofing & Exteriors case-study site. No external dependencies.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

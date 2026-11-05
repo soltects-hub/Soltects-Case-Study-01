@@ -1,0 +1,39 @@
+@page { size: Letter; margin: 2.2cm 2cm; }
+:root { --ink:#1C2B2A; --brick:#C1552E; --line:#DCD6C8; }
+* { box-sizing: border-box; }
+body {
+  font-family: "Georgia", "Iowan Old Style", serif;
+  color: var(--ink);
+  font-size: 11.5pt;
+  line-height: 1.55;
+  max-width: 100%;
+}
+h1 {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 26pt;
+  margin-bottom: 0.1em;
+  border-bottom: 3px solid var(--brick);
+  padding-bottom: 0.3em;
+}
+h1 + h3 { margin-top:0; font-weight: 500; color:#3A4A48; font-family: "Helvetica Neue", Arial, sans-serif; font-size: 13pt;}
+h2 {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 16pt;
+  color: var(--brick);
+  margin-top: 1.8em;
+  border-top: 1px solid var(--line);
+  padding-top: 0.6em;
+  page-break-after: avoid;
+}
+h3 { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 12.5pt; margin-top: 1.2em; page-break-after: avoid; }
+p, li { orphans: 3; widows: 3; }
+table { width: 100%; border-collapse: collapse; margin: 1em 0; font-size: 10pt; }
+th, td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; }
+th { background: #F1EEE6; }
+code { background: #F1EEE6; padding: 1px 5px; border-radius: 3px; font-size: 0.9em; }
+pre { background: #F1EEE6; padding: 10px; border-radius: 6px; overflow-x: auto; font-size: 9.5pt; }
+blockquote { border-left: 3px solid var(--brick); margin-left: 0; padding-left: 1em; color: #3A4A48; }
+hr { border: none; border-top: 1px solid var(--line); margin: 2em 0; }
+a { color: var(--brick); text-decoration: none; }
+img { max-width: 100%; }
+.title-block { text-align:center; margin-bottom: 2em; }
