@@ -7,19 +7,74 @@ named tool against this project's own files, locally, via `node site/api/server.
 Web Vitals, uptime), it's listed under Limitations instead of being guessed at.
 
 Testing environment: Lighthouse 13.6.0 via Chrome headless (the Playwright Chromium already
-installed in this environment), Node v22.23.4, run on 2026-11-05. Lighthouse's default run
-simulates a mid-tier mobile device on a throttled connection; the `--preset=desktop` runs simulate
-a laptop/desktop on an unthrottled connection. Both are shown below because they tell different
+installed in this environment), Node v22.23.4, run on 2026-11-05, with a second verification pass
+(production-readiness audit, see §0) on the same date. Lighthouse's default run simulates a
+mid-tier mobile device on a throttled connection; the `--preset=desktop` runs simulate a
+laptop/desktop on an unthrottled connection. Both are shown below because they tell different
 stories for a mobile-heavy contractor audience.
+
+## 0. Production-readiness audit — bugs caught by visual review, missed by automated tests
+
+Before sign-off, every page was reviewed as rendered screenshots (not just against automated
+pass/fail checks), per the explicit request that functional tests alone aren't sufficient
+evidence of quality. That pass caught three real, sitewide defects that every automated check
+in this document — Lighthouse, the link checker, the keyboard-interaction script — had been
+passing cleanly, because none of them inspect actual visual layout:
+
+1. **The mobile nav drawer never actually opened full-height, on any page, at any point before
+   this audit.** `.site-header` had `backdrop-filter: saturate(140%) blur(8px)` for a frosted-glass
+   effect. Per the CSS spec, `filter`/`backdrop-filter` on an element creates a new *containing
+   block* for any `position: fixed` descendant. `.primary-nav` (the mobile drawer) is nested
+   inside `.site-header` and uses `position: fixed` once JS is active — so instead of anchoring to
+   the viewport, it anchored to the header bar's own ~70px-tall box. The drawer rendered as a short
+   70px-tall sliver showing only the first nav link, with the rest of the page visible (and dimmed
+   by the scrim) beneath it. The automated keyboard test in §6 below only ever checked that
+   `data-open` flipped from `"false"` to `"true"` on click — which it did — so it reported a pass
+   throughout. **Fixed** by removing `backdrop-filter` from `.site-header` (kept a near-opaque
+   `rgba(..., 0.97)` background for the same visual separation without the containing-block side
+   effect). Re-measured: drawer now reports `height: 844` against an 844px viewport — full height,
+   confirmed via `getBoundingClientRect()`, not just visually.
+2. **The hamburger menu icon was invisible — an empty bordered button — on every phone-width
+   screen.** `.nav-toggle` (and the `<svg>` inside it) had no `flex-shrink: 0`. The header row
+   (`.site-header__bar`) is a flex container forced to `flex-wrap: nowrap` on mobile once JS loads
+   (so the drawer's `position: fixed` escape works). At 390px wide, the combined width of the logo,
+   toggle button, phone number, and "Get a Free Quote" button exceeded the viewport, so flexbox's
+   default shrink behavior crushed the toggle button down to 14px wide and its SVG icon down to 0
+   width — the button was still clickable (its hit area persisted), just visually blank. **Fixed**
+   two ways: `flex-shrink: 0` on `.nav-toggle`/its `svg` so it can never be crushed again, and
+   (the actual root cause) hiding `.header-actions` below 640px, since the sticky call bar already
+   repeats "Call Now"/"Free Inspection" there — removing the overflow rather than just protecting
+   one element from its symptom.
+3. **The header showed two CTA buttons with near-identical labels, side by side, on desktop.**
+   `.primary-nav` includes a "Request a Free Inspection" button meant only for the bottom of the
+   mobile drawer. On desktop, `.primary-nav` renders inline in the header bar (not `position:
+   fixed`), so that button rendered right next to the separate "Get a Free Quote" button in
+   `.header-actions` — two buttons, same destination, competing for attention, directly
+   contradicting this project's own stated CRO principle ("one primary + one secondary CTA per
+   page," `03-ux-conversion-strategy.md`). **Fixed** by giving that button a `.primary-nav__cta`
+   class, hidden by default and shown only below 900px (where it's the mobile drawer's own CTA,
+   not a desktop duplicate).
+
+**Why this matters for the "Ready" recommendation below:** these were not edge-case bugs. The nav
+drawer bug affected every single page, at every phone width, the entire time the previous
+sign-off's automated tests were reporting 100/100 accessibility and passing keyboard tests. It is
+the clearest evidence in this project that automated testing and visual review catch different
+classes of defects, and that a "tests pass" report is not sufficient grounds for production
+sign-off on its own.
 
 ## 1. Lighthouse scores
 
 | Page | Mode | Performance | Accessibility | Best Practices | SEO |
 |---|---|---|---|---|---|
 | `/` (home) | Desktop | **100** | **100** | **100** | **100** |
-| `/` (home) | Mobile (throttled) | **92** | **100** | **100** | **100** |
-| `/services/storm-damage-insurance-claims.html` | Desktop | **100** | **100** | **100** | **100** |
+| `/` (home) | Mobile (throttled) | **91** | **100** | **100** | **100** |
+| `/services/storm-damage-insurance-claims.html` | Desktop | **99** | **100** | **100** | **100** |
 | `/quote.html` | Desktop | **100** | **100** | **100** | **100** |
+
+(Re-measured after the production-readiness audit's visual/structural fixes, §0 above. Home's
+mobile performance moved 92→91 — within normal run-to-run lab variance, not a regression. The
+storm-claims page's 100→99 and both pages' LCP are a real, small, accepted cost of the new banner
+art; see below.)
 
 **Mobile Core Web Vitals (home, throttled, lab data):**
 
@@ -32,10 +87,14 @@ stories for a mobile-heavy contractor audience.
 | Speed Index | 3.9 s |
 | Time to Interactive | 3.1 s |
 
-**Desktop (unthrottled, all three tested pages):** FCP/LCP/Speed Index/TTI all 0.5 s, TBT 0 ms,
-CLS 0–0.005. These numbers are expected to be this strong: the site is static HTML/CSS with one
-small JS file and no render-blocking framework — see `04-technical-architecture.md` for why that
-stack was chosen.
+**Desktop (unthrottled):** home is FCP/LCP/Speed Index/TTI all 0.5 s, TBT 0 ms, CLS 0. Quote and
+storm-claims are FCP/Speed Index/TTI 0.5 s, but **LCP 0.8 s** (score 0.97–0.98, still rounding to
+a 100 category score) — the measured cost of the page-banner background art added during the
+production-readiness audit (§0 above; see `02-brand-strategy.md`) to every interior page. 0.8 s is
+still well inside Google's "good" LCP threshold (under 2.5 s), and this number is reported exactly
+as measured rather than left at its pre-audit 0.5 s. These numbers are expected to be this strong
+overall: the site is static HTML/CSS with one small JS file and no render-blocking framework — see
+`04-technical-architecture.md` for why that stack was chosen.
 
 The mobile LCP/Speed Index numbers (3.1 s / 3.9 s under simulated throttling) are the honest
 weak point: Lighthouse's default mobile throttling profile is deliberately pessimistic (a slowed
@@ -93,9 +152,12 @@ reached **100/100** on every page tested afterward:
 ## 3. Responsive testing
 
 Captured with Playwright Chromium at three breakpoints (390×844 mobile, 834×1194 tablet,
-1440×900 desktop) for the homepage, services hub, storm/insurance claims page, quote form, and
-FAQ — 15 screenshots total, in `/screenshots/`. Two real rendering bugs were caught and fixed
-during this pass, not just cosmetic nitpicks:
+1440×900 desktop) for **all 13 pages** — 39 screenshots total, in `/screenshots/` (see the
+inventory table in `case-study.md` §16). The initial 15-screenshot pass (5 key pages) caught two
+rendering bugs; the full 39-screenshot production-readiness pass across all 13 pages then caught
+the three more serious structural bugs documented in §0 above — the nav drawer and duplicate-CTA
+issues in particular were only visible by actually opening the mobile nav and comparing desktop
+headers side by side, not from a static full-page capture:
 
 - **Scroll-reveal content was invisible without JavaScript.** `[data-reveal]` elements defaulted
   to `opacity: 0` regardless of whether `main.js` ran, so a visitor with JS disabled (or a crawler
@@ -117,7 +179,9 @@ internal URLs and assets checked, 0 broken (0 non-2xx responses).**
 
 ## 5. Functional testing (forms)
 
-Tested directly against the running demo API (`site/api/server.js`):
+Tested directly against the running demo API (`site/api/server.js`). **Every submission below is
+test data produced by this team, not a real inquiry** — see `04-technical-architecture.md`,
+"Demo backend limitations," before treating any number here as lead volume:
 
 | Test | Result |
 |---|---|
@@ -150,11 +214,11 @@ Loaded all 13 pages in headless Chromium and captured `console.error` and uncaug
 Tested in this environment: Chromium (via Playwright), both the default and throttled-mobile
 Lighthouse device profiles. **Not tested in this environment:** Safari/WebKit, Firefox, or a real
 iOS/Android device — this environment doesn't have those browser engines available. The CSS used
-(custom properties, `clamp()`, `:focus-visible`, `backdrop-filter`, `IntersectionObserver`) has
-broad modern-browser support, and `backdrop-filter` (the one lowest-support feature, used only for
-the sticky header's blur) degrades gracefully to a solid background with no functional loss where
-unsupported. This gap is listed in `case-study.md`, "Limitations," rather than silently assumed
-to be fine.
+(custom properties, `clamp()`, `:focus-visible`, `IntersectionObserver`) has broad modern-browser
+support. `backdrop-filter` was removed from the header during the production-readiness audit (§0
+above) — not for a compatibility reason, but because it was actively breaking the mobile nav
+drawer in the one browser engine this project *can* test. This gap is listed in `case-study.md`,
+"Limitations," rather than silently assumed to be fine.
 
 ## 9. What's measured vs. estimated vs. untested
 
@@ -167,3 +231,5 @@ to be fine.
 | WCAG 2.1 AA conformance | **Partially verified** — automated (axe-core via Lighthouse) + the specific manual checks above. Not a full manual AA audit and not a third-party certification. |
 | Real-user Core Web Vitals, bounce rate, conversion rate | **Not available** — no live deployment, no real traffic. Not estimated; see `case-study.md`, "Limitations." |
 | Cross-browser (Safari/Firefox/real mobile) rendering | **Not tested** in this environment — flagged, not assumed. |
+| Demo form submissions = real leads | **False, explicitly** — see `04-technical-architecture.md`, "Demo backend limitations." No notification fires, nothing is followed up on, and the business doesn't exist. |
+| "All pages visually reviewed, not just automated-tested" | **True as of the production-readiness audit (§0)** — 39 screenshots across all 13 pages × 3 breakpoints, which is how the nav-drawer/toggle-icon/duplicate-CTA bugs were found after passing every automated check. |

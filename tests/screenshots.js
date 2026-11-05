@@ -15,10 +15,18 @@ fs.mkdirSync(outDir, { recursive: true });
 
 const pages = [
   { path: "/", name: "home" },
+  { path: "/about.html", name: "about" },
   { path: "/services/index.html", name: "services" },
+  { path: "/services/roof-replacement.html", name: "roof-replacement" },
+  { path: "/services/roof-repair.html", name: "roof-repair" },
   { path: "/services/storm-damage-insurance-claims.html", name: "storm-claims" },
+  { path: "/services/gutter-replacement.html", name: "gutter-replacement" },
   { path: "/quote.html", name: "quote" },
+  { path: "/contact.html", name: "contact" },
   { path: "/faq.html", name: "faq" },
+  { path: "/privacy-policy.html", name: "privacy-policy" },
+  { path: "/terms.html", name: "terms" },
+  { path: "/404-not-found-check.html", name: "404" },
 ];
 
 const viewports = [

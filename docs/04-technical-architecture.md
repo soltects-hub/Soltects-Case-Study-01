@@ -84,6 +84,27 @@ node server.js
 # → http://localhost:4173
 ```
 
+### Demo backend limitations (read before treating any submission as real)
+
+- **No submission through this form is, or has ever been, a real customer lead.** Fieldstone
+  Roofing & Exteriors is fictional (see `case-study.md` §1 and `site/about.html#concept`); there
+  is no office, no project consultant, and no one reads `submissions.json` to follow up with a
+  homeowner. Any count of "submissions" quoted anywhere in this project's documentation (e.g.
+  in `06-testing-results.md`) refers only to records produced by this team's own functional
+  testing of the form — never to organic/real-user traffic, because this site has never been
+  deployed publicly.
+- **No notification fires on submission.** No email, text, Slack message, or CRM entry is
+  created. A submission's only effect is a line appended to a local JSON file and a `{"ok":true}`
+  response to the browser.
+- **No authentication, rate-limiting beyond a basic per-IP counter, or spam filtering beyond one
+  honeypot field.** Good enough to demonstrate the pattern; not hardened for a public deployment.
+- **`submissions.json` is local, untracked, and wiped between sessions** (`.gitignore`'d; see
+  `site/api/submissions.json` is never committed) — it is scratch output for demonstrating the
+  flow works end-to-end, not a data store anyone should treat as persistent or authoritative.
+- **Before this becomes a real intake form:** add a transactional email/SMS integration (see
+  above), add real authentication/rate-limiting if exposed publicly, and replace the local JSON
+  file with an actual database or CRM webhook.
+
 ## Deployment configuration
 
 `site/vercel.json` configures static hosting on Vercel: security headers (`X-Content-Type-Options`,

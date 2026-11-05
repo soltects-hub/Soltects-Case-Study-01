@@ -146,8 +146,8 @@ locally against the project's own demo server (`node site/api/server.js`), not e
 | | Performance | Accessibility | Best Practices | SEO |
 |---|---|---|---|---|
 | Homepage — desktop | 100 | 100 | 100 | 100 |
-| Homepage — mobile (throttled) | 92 | 100 | 100 | 100 |
-| Storm & insurance claims page — desktop | 100 | 100 | 100 | 100 |
+| Homepage — mobile (throttled) | 91 | 100 | 100 | 100 |
+| Storm & insurance claims page — desktop | 99 | 100 | 100 | 100 |
 | Quote form page — desktop | 100 | 100 | 100 | 100 |
 
 The accessibility column reads 100 across the board, but it didn't start that way: the first
@@ -160,17 +160,34 @@ broken internal links (23 checked), zero browser console errors across
 all 13 pages, and the quote/contact forms were functionally tested end-to-end against the demo
 API including validation errors and the honeypot spam trap.
 
+**A later production-readiness audit raised the bar further** (full account in
+`06-testing-results.md` §0): a page-by-page visual review — not just automated pass/fail checks —
+found that the mobile nav drawer had never actually opened to full height on any page, because
+`backdrop-filter` on the header created an unintended CSS containing block for its `position:
+fixed` descendant; that the hamburger icon was invisible on phone-width screens because flexbox
+was crushing it to 0 width when the header row overflowed; and that desktop showed two
+competing "request a quote"-style buttons side by side. All three passed every automated test in
+this document throughout — `data-open` still flipped correctly, Lighthouse still scored 100,
+links still resolved — because none of those tools inspect actual rendered layout. All three are
+fixed and re-verified (storm-claims' Performance score moved 100→99 and LCP 0.5s→0.8s as the
+measured cost of the new page-banner art added in the same pass, not from these fixes).
+
 ## 15. Limitations
 
 - **No real photography.** This environment's network policy blocked Unsplash/Pexels/Pixabay
-  during the build (see `07-asset-licensing.md`); the site currently uses original SVG/CSS art
-  direction in place of photography. This is flagged, not hidden.
+  (re-confirmed on a second check during the production-readiness audit, along with Wikimedia
+  Commons and two government photo archives — same result). The site uses original SVG/CSS art
+  direction in place of photography, now extended to every interior page banner plus a sitewide
+  paper-grain texture for visual richness. Exact placements, sizes, and candidate licensed photos
+  are documented in `08-photography-requirements.md`, ready to execute once the dependency clears.
 - **No live deployment or real traffic.** All testing is local. There is no analytics data, no
   A/B test, and no real conversion-rate figure — any such claim would be fabricated, so none is
   made.
-- **No real email/SMS delivery** on form submission — the demo backend validates and stores
-  submissions locally; a production deployment needs a transactional email/SMS provider, named
-  explicitly as a dependency in `04-technical-architecture.md`.
+- **No real email/SMS delivery, and no real leads.** The demo backend validates and stores
+  submissions in a local, untracked JSON file — no notification fires, nothing is followed up on,
+  and any submission count mentioned in this project's testing records is this team's own
+  functional-test data, never real-user traffic. Full limitations in
+  `04-technical-architecture.md`, "Demo backend limitations."
 - **Fictional business.** Fieldstone Roofing & Exteriors has no real history, reviews,
   certifications, or team — by design, per the brief's own constraints on this exercise.
 - **WCAG 2.1 AA is a design target, verified by the specific automated and manual checks listed in
@@ -178,7 +195,11 @@ API including validation errors and the honeypot spam trap.
 
 ## 16. Final project screenshots
 
-Fifteen screenshots in `/screenshots/`: the homepage, services hub, storm & insurance claims
-page, quote form, and FAQ, each at mobile (390×844), tablet (834×1194), and desktop (1440×900) —
-`home-desktop.png`, `home-tablet.png`, `home-mobile.png`, `services-desktop.png`, and so on,
-following the pattern `{page}-{breakpoint}.png`.
+Thirty-nine screenshots in `/screenshots/`: **all 13 pages**, each at mobile (390×844), tablet
+(834×1194), and desktop (1440×900), following the pattern `{page}-{breakpoint}.png`:
+
+`home`, `about`, `services`, `roof-replacement`, `roof-repair`, `storm-claims`,
+`gutter-replacement`, `quote`, `contact`, `faq`, `privacy-policy`, `terms`, `404` — each ×
+`-mobile.png` / `-tablet.png` / `-desktop.png` (e.g. `home-desktop.png`, `about-mobile.png`,
+`roof-replacement-tablet.png`). All 39 were captured after the production-readiness audit's fixes
+(§14), so they reflect the shipped state, not an earlier draft.

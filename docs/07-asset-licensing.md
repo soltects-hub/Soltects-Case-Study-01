@@ -18,6 +18,12 @@ markup. Nothing here is copied from an icon library, stock illustration set, or 
 
 ## Photography — status: blocked, not faked
 
+**Re-verified during the production-readiness audit** (second check, same result): the blocked
+hosts and the exact per-placement spec, sizes, art direction, and candidate photos now live in
+`docs/08-photography-requirements.md` — that document supersedes the summary below for anyone
+picking this up. The summary here is kept for the original build narrative.
+
+
 The brief calls for genuine, properly licensed stock photography (e.g. Unsplash License —
 free for commercial use) in place of generic AI-generated images. We attempted to source it from
 Unsplash, Pexels, and Pixabay and identified specific candidate photos during research (see below),

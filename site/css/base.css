@@ -25,6 +25,26 @@ body {
   color: var(--ink);
   background: var(--paper);
   text-rendering: optimizeLegibility;
+  position: relative;
+}
+/* A faint, fixed paper-grain texture over every page — the kind of tactile
+   detail that keeps large flat color fields from reading as flat digital
+   color, without using any photography. Decorative only: aria-hidden via
+   pointer-events/no content, and invisible to contrast calculations since
+   it sits above content at under 4% opacity. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  pointer-events: none;
+  background: url("/images/art/grain.svg");
+  background-size: 220px 220px;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+}
+@media (prefers-reduced-transparency: reduce) {
+  body::before { display: none; }
 }
 
 h1, h2, h3, h4 {
@@ -154,9 +174,15 @@ textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(247, 244, 238, 0.92);
-  backdrop-filter: saturate(140%) blur(8px);
+  background: rgba(247, 244, 238, 0.97);
   border-bottom: 1px solid var(--line);
+  /* No backdrop-filter here deliberately: filter/backdrop-filter on an
+     ancestor creates a new containing block for any position:fixed
+     descendant (CSS spec), which trapped the mobile nav drawer (.primary-nav,
+     nested inside this header) inside the header's own short bounding box
+     instead of the viewport — the drawer only ever opened ~70px tall.
+     A near-opaque background gets the same "header stands apart from
+     content" effect without that trap. */
 }
 .site-header__bar {
   display: flex;
@@ -182,10 +208,11 @@ textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
   width: 44px; height: 44px;
+  flex-shrink: 0; /* otherwise flexbox crushes this (and its svg) to 0 width when the header row overflows on narrow screens */
   align-items: center;
   justify-content: center;
 }
-.nav-toggle svg { width: 22px; height: 22px; }
+.nav-toggle svg { width: 22px; height: 22px; flex-shrink: 0; }
 
 .primary-nav__list {
   display: flex;
@@ -202,6 +229,14 @@ textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
 .primary-nav__list a:hover,
 .primary-nav__list a[aria-current="page"] { border-color: var(--brick); color: var(--brick-dark); }
 
+/* This CTA belongs to the mobile drawer only — on desktop .primary-nav
+   renders inline in the header bar, where "Get a Free Quote" in
+   .header-actions already covers it. Showing both was two buttons with
+   near-identical labels pointing at the same page side by side in the
+   header, which is exactly the competing-CTA pattern the site's own CRO
+   approach (see docs/03-ux-conversion-strategy.md) argues against. */
+.primary-nav__cta { display: none; }
+
 .header-actions { display: flex; align-items: center; gap: var(--space-3); }
 .header-phone {
   display: inline-flex;
@@ -213,6 +248,11 @@ textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
 }
 
 @media (max-width: 900px) {
+  /* Below this width .primary-nav is never the inline desktop menu (see
+     the drawer/no-JS-fallback rules below), so its own CTA is back in
+     play — shown here regardless of JS state. */
+  .primary-nav__cta { display: block; }
+
   /* No-JS fallback: the toggle button does nothing without main.js, so it
      stays hidden and the nav instead flows open, full-width, below the
      header bar — still fully usable, just not a drawer. Once main.js adds
@@ -245,6 +285,17 @@ textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
   }
   .nav-scrim[data-open="true"] { opacity: 1; pointer-events: auto; }
   .header-phone span.header-phone__label { display: none; }
+}
+
+@media (max-width: 640px) {
+  /* Below this width the sticky call bar (see .call-bar) already repeats
+     "Call Now" and "Free Inspection" at the bottom of the screen, so the
+     header doesn't also need to fit a phone number and a full CTA button
+     into one row next to the brand and the menu toggle — that combination
+     is what was overflowing and crushing the toggle's icon to 0 width.
+     Dropping header-actions here leaves a logo + hamburger row that
+     always fits, at every phone width. */
+  html.js .header-actions { display: none; }
 }
 
 /* ---------- Sticky mobile call bar ---------- */
@@ -464,7 +515,28 @@ html:not(.js) .accordion-trigger .chev { display: none; }
 .breadcrumbs a { color: var(--ink-faint); }
 .breadcrumbs a:hover { color: var(--brick-dark); }
 
-.page-banner { background: var(--ink); color: var(--paper); padding-block: var(--space-6); }
+.page-banner {
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+  padding-block: var(--space-6);
+}
+/* Reuse the homepage hero's roofline art as a quiet brand motif on every
+   interior page banner, instead of a flat color field — the one piece of
+   original illustration the site has, extended sitewide in place of
+   photography (see docs/07-asset-licensing.md). Kept subtle: it reads as
+   texture, not as competing with the heading. */
+.page-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/images/art/hero-roofline.svg") no-repeat right -8% center;
+  background-size: 60% auto;
+  opacity: 0.9;
+  pointer-events: none;
+}
+.page-banner .wrap { position: relative; z-index: 1; }
 .page-banner h1 { color: #fff; }
 .page-banner p { color: #d8d8cc; }
 

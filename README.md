@@ -18,6 +18,8 @@ docs/                 Research, strategy, architecture, testing, and the full ca
   05-seo-implementation.md       Per-page SEO/meta/structured-data summary
   06-testing-results.md          Actual Lighthouse/a11y/link/responsive test output
   07-asset-licensing.md          Font, icon, and photography licensing + a flagged dependency
+  08-photography-requirements.md Exact spec + sourcing for the still-blocked photography dependency
+  09-production-readiness-audit.md  Pre-approval visual/functional audit: 3 bugs found & fixed
   case-study.md                  The full, portfolio-ready case study (also exported as PDF)
 site/                 The actual website (static HTML/CSS/JS, zero build step)
   api/server.js            Demo static server + /api/quote and /api/contact intake endpoints
