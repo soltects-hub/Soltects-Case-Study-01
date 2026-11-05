@@ -107,10 +107,14 @@ node server.js
 
 ## Deployment configuration
 
-`site/vercel.json` configures static hosting on Vercel: security headers (`X-Content-Type-Options`,
-`X-Frame-Options`, `Referrer-Policy`, a restrictive `Permissions-Policy`) on every response, and
-long-lived immutable caching for `/css`, `/js`, and `/images`. To deploy: set the Vercel project's
-root directory to `site/`.
+`site/vercel.json` configures static hosting on Vercel: `"framework": null` (explicitly pins the
+Framework Preset to "Other" — see `docs/10-deployment.md` for the build failure this fixes and
+why), security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, a
+restrictive `Permissions-Policy`) on every response, and long-lived immutable caching for `/css`,
+`/js`, and `/images`. `site/.vercelignore` excludes `api/server.js` and `api/package.json` from
+the deployment upload — both are local-dev-only (see below) and aren't needed for, or safe to
+expose to, Vercel's function auto-detection. To deploy: set the Vercel project's root directory
+to `site/`.
 
 **`site/api/quote.js` and `site/api/contact.js`** are the Vercel serverless-function port of the
 local dev server's two form endpoints — auto-detected by Vercel from any `.js` file under `/api`

@@ -87,6 +87,8 @@ docs/                 Research, strategy, architecture, testing, and the full ca
 site/                 The actual website (static HTML/CSS/JS, zero build step)
   api/server.js            Local dev server: static files + /api/quote and /api/contact
   api/quote.js, contact.js Vercel serverless function versions of the same endpoints
+  vercel.json              Deployment config — framework:null, security headers, caching
+  .vercelignore            Excludes api/server.js + api/package.json from deployment (local-dev-only; see docs/10-deployment.md)
 screenshots/          39 responsive screenshots (13 pages × 3 breakpoints)
 tests/                Link checker, Playwright screenshot capture, Lighthouse-report tooling,
                        and the canonical-domain retargeting script

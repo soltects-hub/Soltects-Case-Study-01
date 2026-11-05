@@ -1,0 +1,13 @@
+# server.js is the local-only dev convenience server (a persistent
+# http.createServer process — not a valid Vercel serverless function
+# handler). Without this, Vercel's zero-config detection would also treat
+# it as a third function candidate (any .js file directly under api/),
+# where it would fail or sit broken, since it doesn't export a request
+# handler and isn't meant to run there. api/quote.js and api/contact.js
+# are the real Vercel-deployed endpoints — see docs/10-deployment.md.
+api/server.js
+
+# Local-dev-only package metadata (declares "main": "server.js" and a
+# "start" script for running the dev server) — not needed for the static
+# site or for api/quote.js / api/contact.js, which have zero dependencies.
+api/package.json
