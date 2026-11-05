@@ -109,12 +109,18 @@ node server.js
 
 `site/vercel.json` configures static hosting on Vercel: security headers (`X-Content-Type-Options`,
 `X-Frame-Options`, `Referrer-Policy`, a restrictive `Permissions-Policy`) on every response, and
-long-lived immutable caching for `/css`, `/js`, and `/images`. To deploy as-is: set the Vercel
-project's root directory to `site/`. The two form endpoints would need to become Vercel serverless
-functions (`api/quote.js`, `api/contact.js`) using the same validation logic in `server.js` — that
-port is straightforward but not done here, since it requires picking a real notification provider
-first (see above). This project was not actually deployed to a live URL as part of this case study;
-local testing against `node server.js` is what the Testing section documents.
+long-lived immutable caching for `/css`, `/js`, and `/images`. To deploy: set the Vercel project's
+root directory to `site/`.
+
+**`site/api/quote.js` and `site/api/contact.js`** are the Vercel serverless-function port of the
+local dev server's two form endpoints — auto-detected by Vercel from any `.js` file under `/api`
+exporting `module.exports = (req, res) => {...}`. They share the same validation and honeypot
+logic as `server.js`, but since Vercel functions are stateless/ephemeral, they log each accepted
+submission to the function's runtime logs instead of appending to a local file — there's no
+durable storage to write to without adding a real database, which (like a real notification
+provider) is a named, not-yet-added dependency; see "Demo backend limitations" above and
+`docs/10-deployment.md` for the full deployment plan and current status (blocked on a Vercel
+account permission, not on this code).
 
 ## SEO implementation
 
