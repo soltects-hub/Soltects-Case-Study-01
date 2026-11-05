@@ -37,11 +37,15 @@ function validateQuote(data) {
   if (!isNonEmptyString(data.name)) errors.push("name is required");
   if (!isNonEmptyString(data.phone)) errors.push("phone is required");
   if (!isValidEmail(data.email)) errors.push("a valid email is required");
-  if (!isNonEmptyString(data.address)) errors.push("address is required");
   if (!/^\d{5}$/.test(String(data.zip || ""))) errors.push("a 5-digit zip is required");
   if (!isNonEmptyString(data.service)) errors.push("service is required");
-  if (!["yes", "no", "not_sure"].includes(data.insurance_claim)) errors.push("insurance_claim is required");
   if (data.consent !== "on" && data.consent !== true && data.consent !== "true") errors.push("consent is required");
+  // address and insurance_claim are optional — see server.js for why
+  // (shared validator between the full quote.html form and the homepage's
+  // shorter multi-step estimate form).
+  if (data.insurance_claim !== undefined && !["yes", "no", "not_sure"].includes(data.insurance_claim)) {
+    errors.push("insurance_claim must be yes, no, or not_sure when provided");
+  }
   return errors;
 }
 
