@@ -12,65 +12,76 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/cinematic.css">
 </head>
-<body>
-<script>document.documentElement.classList.add('js');</script>
+<body class="overflow-guard">
+<script>document.documentElement.classList.add('js-cinema');document.documentElement.classList.add('js');</script>
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="concept-banner">Soltects portfolio concept — Fieldstone Roofing &amp; Exteriors is a fictional demonstration business. <a href="/about.html#concept">What this is</a></div>
 
-<header class="site-header">
-  <div class="wrap site-header__bar">
+<header class="header-cinema" data-solid="false">
+  <div class="wrap-cinema header-cinema__bar">
     <a class="brand" href="/index.html">
       <img class="brand__mark" src="/images/logo-mark.svg" width="34" height="34" alt="">
       <span class="brand__name">Fieldstone<small>Roofing &amp; Exteriors</small></span>
     </a>
-    <button class="nav-toggle" data-nav-toggle type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <nav class="primary-nav" id="primary-nav" data-open="false" aria-label="Primary">
-      <ul class="primary-nav__list">
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/about.html">About</a></li>
-        <li><a href="/services/index.html">Services</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-      <div class="primary-nav__cta">
-        <a class="btn btn-primary btn-block" href="/quote.html">Request a Free Inspection</a>
-      </div>
-    </nav>
-    <div class="header-actions">
-      <a class="header-phone link" href="tel:+18165550149"><span class="header-phone__label">Call</span> (816) 555-0149</a>
-      <a class="btn btn-primary" href="/quote.html">Get a Free Quote</a>
+    <div class="header-cinema__actions">
+      <a class="header-cinema__link" href="tel:+18165550149">(816) 555-0149</a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-overlay">
+        <span class="menu-toggle__bars"><span></span><span></span></span>
+        Menu
+      </button>
     </div>
   </div>
 </header>
-<div class="nav-scrim" data-nav-scrim data-open="false"></div>
+
+<nav class="nav-overlay" id="nav-overlay" data-open="false" aria-label="Primary">
+  <button class="nav-overlay__close" type="button" data-menu-close aria-label="Close menu">&times;</button>
+  <div class="wrap-cinema">
+    <ul class="nav-overlay__list">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/services/index.html">Services</a></li>
+      <li><a href="/faq.html">FAQ</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-overlay__cta">
+      <a class="btn-cinema btn-cinema--gold" href="/quote.html">Request an Estimate</a>
+    </div>
+    <div class="nav-overlay__meta">
+      <span>(816) 555-0149</span>
+      <span>Overland Park, KS · Kansas City Metro</span>
+      <a href="/about.html#concept">What this project is</a>
+    </div>
+  </div>
+</nav>
 
 <main id="main">
-  <section class="section" style="padding-block: var(--space-8);">
-    <div class="wrap center-col">
-      <span class="eyebrow">404</span>
-      <h1>We couldn't find that page.</h1>
-      <p>The link may be outdated, or the page may have moved. Here's where you probably meant to go:</p>
-      <div class="cluster" style="justify-content:center; margin-top:2rem;">
-        <a class="btn btn-primary" href="/index.html">Back to Home</a>
-        <a class="link" href="/services/index.html">Services</a>
-        <a class="link" href="/faq.html">FAQ</a>
-        <a class="link" href="/contact.html">Contact</a>
+  <section class="section-cinema section-cinema--ink" style="min-height: 72svh; display:flex; align-items:center;">
+    <div class="wrap-cinema center-col" data-reveal-cinema="rise">
+      <span class="section-cinema__eyebrow">404</span>
+      <h1 class="section-cinema__head" style="margin-inline:auto;">We couldn't find that page.</h1>
+      <p class="prose-cinema" style="margin-inline:auto;">The link may be outdated, or the page may have moved. Here's where you probably meant to go:</p>
+      <h2 class="visually-hidden">Suggested links</h2>
+      <div class="cluster" style="justify-content:center; margin-top:2rem; flex-wrap:wrap;">
+        <a class="btn-cinema btn-cinema--gold" href="/index.html">Back to Home</a>
+        <a class="btn-cinema btn-cinema--outline" href="/services/index.html">Services</a>
+        <a class="btn-cinema btn-cinema--outline" href="/faq.html">FAQ</a>
+        <a class="btn-cinema btn-cinema--outline" href="/contact.html">Contact</a>
       </div>
     </div>
   </section>
 </main>
 
-<footer class="site-footer">
-  <div class="wrap footer-grid">
+<footer class="footer-cinema">
+  <div class="wrap-cinema footer-cinema__top">
     <div>
-      <a class="brand" href="/index.html" style="margin-bottom:1rem;">
-        <img class="brand__mark" src="/images/logo-mark.svg" width="34" height="34" alt="">
-        <span class="brand__name" style="color:#fff;">Fieldstone<small style="color:#9fada9;">Roofing &amp; Exteriors</small></span>
-      </a>
-      <p>Residential roofing contractor serving the Kansas City metro. <strong>Fictional concept business</strong> created for a Soltects portfolio case study — not a real company or offer of services.</p>
+      <p class="footer-cinema__cta-line">Ready when you are.</p>
+      <div class="cluster" style="gap:0.75rem;">
+        <a class="btn-cinema btn-cinema--solid" href="/quote.html">Request an Estimate</a>
+        <a class="btn-cinema btn-cinema--outline" href="tel:+18165550149">Call (816) 555-0149</a>
+      </div>
+      <p style="margin-top:1.5rem; font-size: var(--step--1); color:#8a9893;">Residential roofing contractor serving the Kansas City metro. <strong style="color:#c9d1cd;">Fictional concept business</strong> created for a Soltects portfolio case study — not a real company or offer of services.</p>
     </div>
     <div>
       <h3>Company</h3>
@@ -91,19 +102,22 @@
       <p style="margin-top:1rem;">(816) 555-0149<br>123 Shawnee Mission Pkwy<br>Overland Park, KS 66204</p>
     </div>
   </div>
-  <div class="wrap footer-bottom">
+  <div class="wrap-cinema footer-cinema__bottom">
     <p>© 2026 Fieldstone Roofing &amp; Exteriors. Concept project by <a href="https://soltects.com" class="link">Soltects</a>.</p>
     <p><a href="/privacy-policy.html">Privacy Policy</a> · <a href="/terms.html">Terms &amp; Conditions</a></p>
   </div>
 </footer>
 
-<div class="call-bar">
-  <div class="call-bar__inner">
-    <a href="tel:+18165550149">Call Now</a>
-    <a href="/quote.html">Free Inspection</a>
+<div class="cookie-consent" data-visible="false" role="region" aria-label="Cookie consent">
+  <p>Essential local storage only — no tracking. <a class="link" style="color:var(--gold);" href="/privacy-policy.html">Privacy Policy</a></p>
+  <div class="cookie-consent__actions">
+    <button class="btn-cinema btn-cinema--gold" type="button" data-cookie-accept>Accept</button>
+    <button class="btn-cinema btn-cinema--outline" type="button" data-cookie-decline>Decline</button>
   </div>
 </div>
 
-<script src="/js/main.js"></script>
+<script src="/js/vendor/gsap/gsap.min.js"></script>
+<script src="/js/vendor/gsap/ScrollTrigger.min.js"></script>
+<script src="/js/cinematic.js"></script>
 </body>
 </html>

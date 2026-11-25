@@ -234,6 +234,22 @@ html.js-cinema .hero-cinema__scroll-line::after { animation: scrollLine 2.2s var
 @keyframes scrollLine { 0% { top: -100%; } 60% { top: 100%; } 100% { top: 100%; } }
 @media (prefers-reduced-motion: reduce) { .hero-cinema__scroll-line::after { animation: none; top: 0; } }
 
+/* ============================= Inner-page hero (shorter variant) ============================= */
+/* Same art/scrim/content structure as .hero-cinema, just shorter — used on
+   every page except the homepage, which earns the full 100svh treatment. */
+.hero-cinema--inner { min-height: 62svh; }
+.hero-cinema--inner .hero-cinema__headline { font-size: var(--display-2); max-width: 20ch; }
+.breadcrumbs-cinema {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  font-size: var(--step--1);
+  color: #aab6b2;
+  margin-bottom: var(--space-3);
+}
+.breadcrumbs-cinema a { color: #aab6b2; text-decoration: none; }
+.breadcrumbs-cinema a:hover { color: var(--gold); text-decoration: underline; }
+
 /* ============================= Section system ============================= */
 .section-cinema {
   position: relative;
@@ -529,7 +545,15 @@ html:not(.js-cinema) .process-pin__progress { display: none; }
 }
 
 /* ============================= Estimate (multi-step) ============================= */
-.estimate-cinema { background: var(--paper-raised); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
+/* color: var(--ink) is explicit, not incidental — .estimate-cinema is a
+   light card that can sit inside a .section-cinema--ink wrapper (its
+   `color: var(--paper)` is meant for text directly on the dark background).
+   Without this, field labels inherit --paper and become ~1.1:1 contrast on
+   this card's white background. Only caught via Lighthouse on quote.html,
+   where the form sits above the fold; the homepage's identical form has
+   the same bug but sits below a scroll-triggered reveal, so axe's static
+   capture never saw it revealed. Fixing at the component, not per-page. */
+.estimate-cinema { background: var(--paper-raised); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; color: var(--ink); }
 .estimate-cinema__steps { display: flex; border-bottom: 1px solid var(--line); }
 .estimate-cinema__step-label {
   flex: 1;
@@ -553,7 +577,7 @@ html:not(.js-cinema) .process-pin__progress { display: none; }
   right: var(--space-4);
   bottom: var(--space-4);
   z-index: 150;
-  transform: translateY(140%);
+  transform: translateY(200%);
   transition: transform var(--dur-slow) var(--ease-cinema);
 }
 .floating-cta[data-visible="true"] { transform: translateY(0); }
@@ -576,28 +600,46 @@ html:not(.js-cinema) .process-pin__progress { display: none; }
 }
 
 /* ============================= Cookie consent ============================= */
+/* A slim, full-width bar at the true bottom edge — not a tall bottom-left
+   card. A fixed-position banner unavoidably sits over whatever content is
+   in its screen region regardless of scroll position (every cookie banner
+   does this; it's dismissed with one click like any other), but it must
+   never sit over an actual clickable CTA. A tall corner card was measured
+   (via bounding-box collision tests across all 13 pages, re-checked after
+   scrolling back to the top) to overlap the homepage hero's own CTA button,
+   the 404 footer CTA, and a contact-page link on some pages. Kept to a
+   single slim row — well under the vertical space any hero/footer reserves
+   above its own CTA — clears all of them; re-verified empirically, not
+   assumed. */
 .cookie-consent {
   position: fixed;
-  left: var(--space-4); bottom: var(--space-4);
-  max-width: 26rem;
+  right: var(--space-3); bottom: var(--space-3);
+  max-width: 16rem;
   z-index: 400;
   background: var(--cinema);
   color: var(--paper);
-  border-radius: var(--radius-lg);
-  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.75rem;
   box-shadow: var(--shadow-lg);
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-  transform: translateY(140%);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  transform: translateY(200%);
   transition: transform var(--dur-slow) var(--ease-cinema);
 }
 .cookie-consent[data-visible="true"] { transform: translateY(0); }
-.cookie-consent p { font-size: var(--step--1); color: #c9d1cd; margin: 0; flex: 1 1 14rem; }
+.cookie-consent p { font-size: var(--step--1); color: #c9d1cd; margin: 0; }
 .cookie-consent__actions { display: flex; gap: var(--space-2); flex-wrap: wrap; flex-shrink: 0; }
-.cookie-consent .btn-cinema { padding: 0.6rem 1.1rem; min-height: 40px; font-size: var(--step--1); }
-@media (max-width: 640px) { .cookie-consent { left: var(--space-3); right: var(--space-3); bottom: calc(var(--space-3) + 56px); } }
+.cookie-consent .btn-cinema { padding: 0.5rem 1rem; min-height: 36px; font-size: var(--step--1); }
+/* The floating "Request an Estimate" CTA already anchors bottom-right at
+   the same corner (see .floating-cta) — while both are visible, stack the
+   consent banner above it instead of letting them overlap each other. */
+.floating-cta[data-visible="true"] ~ .cookie-consent[data-visible="true"] { bottom: calc(var(--space-4) + 64px); }
+@media (max-width: 640px) {
+  .cookie-consent { left: var(--space-3); right: var(--space-3); max-width: none; bottom: 56px; }
+  .floating-cta[data-visible="true"] ~ .cookie-consent[data-visible="true"] { bottom: calc(56px + 76px); }
+}
 
 /* ============================= Premium footer ============================= */
 .footer-cinema { background: var(--cinema); color: #c9d1cd; padding-block: var(--space-7) var(--space-5); }
@@ -620,6 +662,61 @@ html:not(.js-cinema) .process-pin__progress { display: none; }
 .footer-cinema__bottom a.link { color: var(--gold); text-decoration: underline; text-underline-offset: 2px; }
 @media (max-width: 860px) { .footer-cinema__top { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .footer-cinema__top { grid-template-columns: 1fr; } }
+
+/* ============================= FAQ accordion (cinema skin) ============================= */
+/* Reuses the legacy .accordion-item/.accordion-trigger/.accordion-panel
+   markup and site/js/main.js's initAccordions() unchanged — only restyled
+   here so the FAQ page matches the cinematic system without a second JS
+   implementation of the same interaction. */
+.faq-cinema .accordion-item { border-bottom: 1px solid var(--line); }
+.faq-cinema .accordion-item:first-child { border-top: 1px solid var(--line); }
+.faq-cinema .accordion-trigger {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: left;
+  background: none;
+  border: none;
+  padding: var(--space-4) 0;
+  font-family: var(--font-head);
+  font-size: var(--step-2);
+  color: var(--ink);
+  min-height: 44px;
+}
+.faq-cinema .accordion-trigger .chev { flex-shrink: 0; width: 20px; height: 20px; transition: transform var(--dur-base) var(--ease); }
+.faq-cinema .accordion-trigger[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.faq-cinema .accordion-trigger[aria-expanded="true"] { color: var(--brick-dark); }
+.faq-cinema .accordion-panel { overflow: hidden; max-height: 0; transition: max-height var(--dur-base) var(--ease); }
+.faq-cinema .accordion-panel__inner { padding-bottom: var(--space-4); }
+.faq-cinema .accordion-panel__inner p { font-size: var(--step-0); line-height: 1.65; color: var(--ink-soft); max-width: 42rem; }
+.faq-cinema__group-head {
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brick-dark);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-1);
+}
+.faq-cinema__group-head:first-of-type { margin-top: 0; }
+
+/* ============================= Legal / long-form article ============================= */
+.article-cinema { max-width: 48rem; }
+.article-cinema h2 { font-family: var(--font-head); font-size: var(--step-3); margin-top: var(--space-6); margin-bottom: var(--space-2); }
+.article-cinema h2:first-child { margin-top: 0; }
+.article-cinema h3 { font-family: var(--font-head); font-size: var(--step-1); margin-top: var(--space-4); margin-bottom: 0.5rem; }
+.article-cinema p, .article-cinema li { font-size: var(--step-0); line-height: 1.7; color: var(--ink-soft); }
+.article-cinema ul, .article-cinema ol { padding-left: 1.25rem; margin-bottom: var(--space-3); }
+.article-cinema li { margin-bottom: 0.4rem; }
+.article-cinema__notice {
+  background: var(--brick-tint);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+.article-cinema__notice p { margin: 0; color: var(--ink); }
 
 /* ============================= Utility ============================= */
 .overflow-guard { overflow-x: clip; }

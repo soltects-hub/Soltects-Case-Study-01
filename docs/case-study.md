@@ -193,13 +193,121 @@ measured cost of the new page-banner art added in the same pass, not from these 
 - **WCAG 2.1 AA is a design target, verified by the specific automated and manual checks listed in
   section 13**, not a certified audit by a third-party accessibility auditor.
 
-## 16. Final project screenshots
+## 16. Phase 2 — Cinematic redesign
 
-Thirty-nine screenshots in `/screenshots/`: **all 13 pages**, each at mobile (390×844), tablet
-(834×1194), and desktop (1440×900), following the pattern `{page}-{breakpoint}.png`:
+After the Phase 1 build above shipped and tested clean, the project took on a second, much larger
+phase: a full visual and interaction redesign using an Awwwards-tier cinematic site (era-residence.com)
+as the creative benchmark, rebuilding every one of the 13 pages rather than refreshing the
+homepage alone. Full creative-direction reasoning is in `docs/11-cinematic-redesign-plan.md`; the
+short version:
 
-`home`, `about`, `services`, `roof-replacement`, `roof-repair`, `storm-claims`,
-`gutter-replacement`, `quote`, `contact`, `faq`, `privacy-policy`, `terms`, `404` — each ×
-`-mobile.png` / `-tablet.png` / `-desktop.png` (e.g. `home-desktop.png`, `about-mobile.png`,
-`roof-replacement-tablet.png`). All 39 were captured after the production-readiness audit's fixes
-(§14), so they reflect the shipped state, not an earlier draft.
+- **The reference site was unreachable from this environment** (network policy blocks it, same as
+  the stock-photo hosts in §15) — confirmed, not assumed, via curl, a fetch tool, and a search for
+  any browser tool with independent network access. The redesign was built from the brief's own
+  detailed interaction spec plus established conventions for this design genre, not from direct
+  inspection of the reference site's live behavior. That's a real fidelity limitation, stated
+  plainly rather than implied by a confident-sounding result.
+- **New visual system**: full-viewport/large-format hero treatment, an editorial display type
+  scale (Fraunces at up to ~8.5rem), asymmetrical split layouts in place of the original's centered
+  card grids, a deeper near-black `--cinema` tone for full-bleed sections, and GSAP + ScrollTrigger
+  (vendored locally, standard no-charge license) driving scroll-triggered reveals, subtle parallax,
+  and one deliberate pinned sequence (the "Our Process" section) — never scroll-hijacking the page.
+- **Photography remained blocked** (§15, re-confirmed again this phase) and the brief explicitly
+  ruled out AI-generated or stock-lookalike substitutes. In its place: original parametric SVG
+  line-elevation illustrations (house/roofline outlines, generated with seeded variation, not
+  photographs) for every hero, service page, and gallery placement — each one labeled "illustrative
+  concept" in both visible caption text and `alt` text, never presented as a real completed project.
+
+## 17. New interactive features
+
+Built on the new design system (`site/css/cinematic.css`, `site/js/cinematic.js` and four
+component scripts): a full-screen animated navigation overlay (replacing the old off-canvas
+drawer) with Escape/outside-click/focus-return handling; a horizontally draggable project gallery
+(pointer-events drag-to-scroll plus prev/next buttons, scroll-snap, touch-native on mobile); a
+before/after comparison slider (pointer events, `role="slider"`, keyboard arrow support); a
+tabbed services explorer; the pinned "Our Process" sequence; a multi-step estimate form (3 steps
+on the homepage, 4 on the dedicated quote page to additionally collect the address field); a
+floating "Request an Estimate" CTA; and a functional cookie-consent banner (Accept/Decline,
+persisted in `localStorage`, no real tracking behind it). Every one of these is covered in the
+verified-interactions table in §18, not just implemented.
+
+## 18. Full-site testing & results (Phase 2)
+
+Tested the same way as Phase 1 — against the project's own local demo server, not estimated —
+but across all 13 redesigned pages this time, not a representative sample:
+
+| | Performance | Accessibility | Best Practices | SEO |
+|---|---|---|---|---|
+| Homepage — desktop | 99 | 100 | 100 | 100 |
+| About — desktop | 100 | 100 | 100 | 100 |
+| Services hub — desktop | 100 | 100 | 100 | 100 |
+| Roof replacement — desktop | 99 | 100 | 100 | 100 |
+| Quote (4-step form) — desktop | 100 | 100 | 100 | 100 |
+| Contact — desktop | 99 | 100 | 100 | 100 |
+| FAQ — desktop | 98 | 100 | 100 | 100 |
+| 404 — desktop | 100 | 100 | 100 | 66¹ |
+
+¹ The 404 page's only SEO finding is `is-crawlable` — it carries `<meta name="robots"
+content="noindex, follow">` deliberately, so search engines don't index a not-found page. That's
+correct practice, not a defect.
+
+Sitewide regression, all 13 pages: **0 broken links** (40 internal URLs crawled, `tests/linkcheck.js`),
+**0 browser console/page errors** across 13 pages × 5 viewport widths (375/390/768/1440/1920px),
+**0 horizontal-overflow issues** at any of those widths, `prefers-reduced-motion` respected (every
+GSAP animation disabled, content shown immediately — checked on 3 representative pages, not just
+the homepage), and full content visible with JavaScript disabled on every page type checked.
+
+**Real bugs found and fixed this phase** (via actual Playwright-driven testing, not inspection):
+a horizontal-overflow bug in the pinned process section; a gallery item sizing bug caused by GSAP
+Draggable restructuring the DOM mid-drag (replaced with a plain pointer-events handler); a gallery
+button scoping bug; three accessibility regressions on the new homepage (contrast, heading order,
+a color-only link) caught by Lighthouse and fixed to 100/100; a pre-existing, sitewide phone-number
+regex syntax error on `quote.html`/`contact.html` that predates this redesign entirely and was
+only surfaced once a multi-step form's validation logic actually invoked `checkValidity()`; two
+heading-order gaps on the newly-built `contact.html` and `404.html` pages; and — the most
+significant one — a genuine, previously-hidden color-contrast bug in the shared `.estimate-cinema`
+component (white card nested in a dark section, inheriting the dark section's light text color for
+its field labels, ~1.1:1 contrast) that escaped detection on the homepage only because that form
+sits below a scroll-triggered reveal Lighthouse's static capture never saw revealed — fixed at the
+component level, not patched per-page. A follow-on round of manual bounding-box collision testing
+(not part of a standard Lighthouse/axe pass) also found that a cookie-consent banner which stayed
+pinned to one screen corner indefinitely would, on certain pages at certain scroll positions,
+visually sit over a real clickable CTA; fixed by making the banner's visibility responsive to
+scroll position (hidden near the very top and very bottom of a page) rather than "shown once,
+stays forever," the same principle the pre-existing floating CTA already used.
+
+Full detail, the complete bug list with root causes, and the manually-driven interaction-by-
+interaction verification table are in `docs/12-cinematic-redesign-results.md`.
+
+## 19. What Phase 2 deliberately did not do
+
+- **No live deployment check.** This environment has no authenticated access to the project's
+  Vercel account this session, so a live URL could not be verified. `site/vercel.json` and
+  `site/.vercelignore` were reviewed and need no changes for the new assets (the existing wildcard
+  cache-control rules for `/css/`, `/js/`, and `/images/` already cover every new file); seeing it
+  live still requires an actual `vercel --prod` run (or the Vercel dashboard's Git integration)
+  from an authenticated account, documented step-by-step in `docs/10-deployment.md`.
+- **No new photography**, for the same network-policy reason as Phase 1 (§15) — the illustration
+  system was deepened instead, not abandoned.
+- **No fabricated results.** The redesign's stat counters, service-area list, and process steps are
+  all facts already established in Phase 1 content (4 services, a 48-hour response window, 6 cities)
+  — nothing new was invented to make the new design feel more impressive.
+
+## 20. Final project screenshots
+
+Organized under `docs/screenshots/`:
+
+- **`pages/`** — all 13 redesigned pages, full-page desktop (1440×900, @2x) capture:
+  `home`, `about`, `services`, `roof-replacement`, `roof-repair`, `storm-damage`,
+  `gutter-replacement`, `quote`, `contact`, `faq`, `privacy-policy`, `terms`, `404` (each
+  `-desktop.png`), plus `home-mobile.png` (390×844) and `home-tablet.png` (834×1194).
+- **`interactions/`** — specific interactive states: the full-screen nav overlay open, the
+  draggable gallery, the before/after slider, the services explorer with a non-default tab
+  selected, the estimate form on its second step, the FAQ accordion with an item expanded, and the
+  cookie-consent banner.
+- **`cinematic-redesign/`** — the homepage-only screenshot set captured partway through this
+  project (desktop hero, desktop footer, mobile hero, tablet), kept from Phase 2's homepage-first
+  milestone for a before/after record of how the full-site pass extended that initial work.
+
+All screenshots in `pages/` and `interactions/` were captured after every fix in §18, so they
+reflect the final shipped state, not an earlier draft.

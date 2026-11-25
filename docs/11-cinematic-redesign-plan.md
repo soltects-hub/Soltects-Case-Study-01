@@ -183,11 +183,13 @@ Pages migrate to the new system one at a time (Phase 3: homepage; Phase 4: the o
 than a single atomic rewrite — each migrated page is fully functional and tested before the next
 starts, so the site is never in a broken intermediate state if this spans multiple sessions.
 
-## Execution plan for the rest of this session
+## Execution plan — status
 
-Given the genuine scope here (this is, realistically, a multi-thousand-line redesign touching
-every page), this session will complete **Phase 3 (homepage) fully — built, polished, and
-tested** — and report honest status on Phases 4–7, rather than spreading effort thin across all 13
-pages at low fidelity. "Do not claim completion based on code implementation alone" applies most
-to the homepage, since it's the one piece meant to finish this session: it gets real screenshots,
-a real Lighthouse run, and a real list of verified interactions before I call it done.
+This plan was originally scoped to complete Phase 3 (homepage) fully in one session and report
+honest status on Phases 4–7 as not-yet-started, rather than spread effort thin across all 13 pages
+at low fidelity. **A follow-up request asked for the complete site, not the homepage alone** — all
+12 remaining pages have since been migrated to this same design system, interactive components
+verified across the full site (not just the homepage), a full responsive/technical QA pass run on
+all 13 pages, and the case study documentation and PDF updated accordingly. Full detail,
+including every bug found during the full-site pass, is in
+`docs/12-cinematic-redesign-results.md`.

@@ -17,78 +17,91 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/tokens.css">
 <link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/cinematic.css">
 </head>
-<body>
-<script>document.documentElement.classList.add('js');</script>
+<body class="overflow-guard">
+<script>document.documentElement.classList.add('js-cinema');document.documentElement.classList.add('js');</script>
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="concept-banner">Soltects portfolio concept — Fieldstone Roofing &amp; Exteriors is a fictional demonstration business. <a href="/about.html#concept">What this is</a></div>
 
-<header class="site-header">
-  <div class="wrap site-header__bar">
+<header class="header-cinema" data-solid="false">
+  <div class="wrap-cinema header-cinema__bar">
     <a class="brand" href="/index.html">
       <img class="brand__mark" src="/images/logo-mark.svg" width="34" height="34" alt="">
       <span class="brand__name">Fieldstone<small>Roofing &amp; Exteriors</small></span>
     </a>
-    <button class="nav-toggle" data-nav-toggle type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <nav class="primary-nav" id="primary-nav" data-open="false" aria-label="Primary">
-      <ul class="primary-nav__list">
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/about.html">About</a></li>
-        <li><a href="/services/index.html" aria-current="page">Services</a></li>
-        <li><a href="/faq.html">FAQ</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-      </ul>
-      <div class="primary-nav__cta">
-        <a class="btn btn-primary btn-block" href="/quote.html">Request a Free Inspection</a>
-      </div>
-    </nav>
-    <div class="header-actions">
-      <a class="header-phone link" href="tel:+18165550149"><span class="header-phone__label">Call</span> (816) 555-0149</a>
-      <a class="btn btn-primary" href="/quote.html">Get a Free Quote</a>
+    <div class="header-cinema__actions">
+      <a class="header-cinema__link" href="tel:+18165550149">(816) 555-0149</a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="nav-overlay">
+        <span class="menu-toggle__bars"><span></span><span></span></span>
+        Menu
+      </button>
     </div>
   </div>
 </header>
-<div class="nav-scrim" data-nav-scrim data-open="false"></div>
 
-<main id="main">
-  <div class="page-banner">
-    <div class="wrap">
-      <p class="breadcrumbs" style="color:#aab6b2;"><a href="/index.html" style="color:#aab6b2;">Home</a> / Services</p>
-      <h1>Roofing services</h1>
-      <p>Four core services, each with its own process page so you know exactly what to expect before you call.</p>
+<nav class="nav-overlay" id="nav-overlay" data-open="false" aria-label="Primary">
+  <button class="nav-overlay__close" type="button" data-menu-close aria-label="Close menu">&times;</button>
+  <div class="wrap-cinema">
+    <ul class="nav-overlay__list">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/about.html">About</a></li>
+      <li><a href="/services/index.html" aria-current="page">Services</a></li>
+      <li><a href="/faq.html">FAQ</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-overlay__cta">
+      <a class="btn-cinema btn-cinema--gold" href="/quote.html">Request an Estimate</a>
+    </div>
+    <div class="nav-overlay__meta">
+      <span>(816) 555-0149</span>
+      <span>Overland Park, KS · Kansas City Metro</span>
+      <a href="/about.html#concept">What this project is</a>
     </div>
   </div>
+</nav>
 
-  <section class="section" aria-labelledby="all-services-heading">
-    <div class="wrap">
+<main id="main">
+
+  <section class="hero-cinema hero-cinema--inner" data-parallax-root>
+    <img class="hero-cinema__art" src="/images/art/craftsmanship.svg" alt="" data-parallax="0.9">
+    <div class="hero-cinema__scrim" aria-hidden="true"></div>
+    <div class="hero-cinema__content">
+      <p class="breadcrumbs-cinema" data-reveal-cinema="rise"><a href="/index.html">Home</a> <span>/</span> <span>Services</span></p>
+      <span class="hero-cinema__eyebrow" data-reveal-cinema="rise">What we do</span>
+      <h1 class="hero-cinema__headline" data-reveal-cinema="rise">Four services. <em>One standard of work.</em></h1>
+      <p class="hero-cinema__sub" data-reveal-cinema="rise">Each service has its own process page, so you know exactly what to expect before you ever pick up the phone.</p>
+    </div>
+  </section>
+
+  <section class="section-cinema section-cinema--paper" aria-labelledby="all-services-heading">
+    <div class="wrap-cinema">
       <h2 id="all-services-heading" class="visually-hidden">All roofing services</h2>
-      <div class="grid grid-4">
+      <div class="grid grid-4" data-reveal-cinema="rise">
 
-        <article class="card card--service" data-reveal>
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12l9-7 9 7"/><path d="M5 10v9h14v-9"/><path d="M9 19v-6h6v6"/></svg>
+        <article class="card card--service">
+          <div class="art-frame art-frame--wide" style="margin-bottom:1rem;"><img src="/images/art/gallery-1.svg" alt="Original architectural line-art illustration representing full roof tear-off and replacement — not a photograph of a completed project."></div>
           <h3>Roof Replacement</h3>
           <p>Full tear-off and replacement with asphalt shingle, metal, or synthetic systems.</p>
           <a class="link" href="/services/roof-replacement.html">See the process →</a>
         </article>
 
-        <article class="card card--service" data-reveal>
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 4l6 6-9 9H5v-6l9-9z"/><path d="M13 7l4 4"/></svg>
+        <article class="card card--service">
+          <div class="art-frame art-frame--wide" style="margin-bottom:1rem;"><img src="/images/art/gallery-2.svg" alt="Original architectural line-art illustration representing targeted roof repair work — not a photograph of a completed project."></div>
           <h3>Roof Repair</h3>
           <p>Targeted repairs for leaks, missing shingles, flashing failures, and ventilation issues.</p>
           <a class="link" href="/services/roof-repair.html">See the process →</a>
         </article>
 
-        <article class="card card--service" data-reveal>
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 3l-5 9h18l-5-9"/><path d="M6 12v7a2 2 0 002 2h8a2 2 0 002-2v-7"/><path d="M12 12v9"/></svg>
+        <article class="card card--service">
+          <div class="art-frame art-frame--wide" style="margin-bottom:1rem;"><img src="/images/art/gallery-3.svg" alt="Original architectural line-art illustration representing storm damage documentation — not a photograph of a completed project."></div>
           <h3>Storm &amp; Insurance Claims</h3>
           <p>Hail and wind damage documentation, adjuster meetings, and supplement support.</p>
           <a class="link" href="/services/storm-damage-insurance-claims.html">See the process →</a>
         </article>
 
-        <article class="card card--service" data-reveal>
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16"/><path d="M6 6v12a2 2 0 002 2h2" /><path d="M10 10h4"/><path d="M10 14h2"/></svg>
+        <article class="card card--service">
+          <div class="art-frame art-frame--wide" style="margin-bottom:1rem;"><img src="/images/art/gallery-4.svg" alt="Original architectural line-art illustration representing seamless gutter installation — not a photograph of a completed project."></div>
           <h3>Gutter Replacement</h3>
           <p>Seamless aluminum gutters and leaf protection sized to your roof's actual water flow.</p>
           <a class="link" href="/services/gutter-replacement.html">See the process →</a>
@@ -98,13 +111,13 @@
     </div>
   </section>
 
-  <section class="section section--raised" aria-labelledby="materials-heading">
-    <div class="wrap">
-      <div class="center-col">
-        <span class="eyebrow">Materials</span>
-        <h2 id="materials-heading">Materials we work with</h2>
+  <section class="section-cinema section-cinema--raised" aria-labelledby="materials-heading">
+    <div class="wrap-cinema">
+      <div data-reveal-cinema="rise" style="max-width:40rem; margin-bottom:var(--space-6);">
+        <span class="section-cinema__eyebrow">Materials</span>
+        <h2 class="section-cinema__head text-balance" id="materials-heading">Materials we work with.</h2>
       </div>
-      <div class="grid grid-3" style="margin-top:3rem;">
+      <div class="grid grid-3" data-reveal-cinema="rise">
         <div class="card">
           <h3 style="font-size:var(--step-1)">Asphalt shingle</h3>
           <p>The most common residential roofing material in the metro — a wide range of colors and warranty tiers at a range of price points.</p>
@@ -121,14 +134,14 @@
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap grid grid-2" style="align-items:center;">
-      <div>
-        <span class="eyebrow">Paying for it</span>
-        <h2>Financing</h2>
-        <p>Not every project is paid out of pocket or entirely through insurance. If you'd like to discuss financing options for the portion of a project insurance doesn't cover, bring it up during your estimate — your project consultant can walk through what's available at the time.</p>
+  <section class="section-cinema section-cinema--paper">
+    <div class="wrap-cinema split-cinema">
+      <div data-reveal-cinema="rise">
+        <span class="section-cinema__eyebrow">Paying for it</span>
+        <h2 class="section-cinema__head text-balance">Financing.</h2>
+        <p class="prose-cinema">Not every project is paid out of pocket or entirely through insurance. If you'd like to discuss financing options for the portion of a project insurance doesn't cover, bring it up during your estimate — your project consultant can walk through what's available at the time.</p>
       </div>
-      <div class="card">
+      <div class="card" data-reveal-cinema="rise">
         <h3>Insurance claim?</h3>
         <p>If this is storm or hail related, start with our insurance claims page so you know what the process actually looks like before your adjuster visit.</p>
         <a class="btn btn-secondary" href="/services/storm-damage-insurance-claims.html">Storm &amp; Insurance Claims →</a>
@@ -136,30 +149,32 @@
     </div>
   </section>
 
-  <section class="section section--ink" aria-labelledby="cta-heading">
-    <div class="wrap center-col">
-      <h2 id="cta-heading" style="color:#fff;">Not sure which service you need?</h2>
-      <p style="color:#d8d8cc;">A free inspection answers that — no pressure, no obligation, just a written assessment.</p>
+  <section class="section-cinema section-cinema--ink" aria-labelledby="cta-heading">
+    <div class="wrap-cinema center-col" data-reveal-cinema="rise">
+      <h2 id="cta-heading" class="section-cinema__head" style="margin-inline:auto;">Not sure which service you need?</h2>
+      <p class="prose-cinema" style="margin-inline:auto;">A free inspection answers that — no pressure, no obligation, just a written assessment.</p>
       <div class="cluster" style="justify-content:center; margin-top:1.5rem;">
-        <a class="btn btn-primary" href="/quote.html">Request a Free Inspection</a>
-        <a class="btn btn-secondary" href="tel:+18165550149">Call (816) 555-0149</a>
+        <a class="btn-cinema btn-cinema--gold" href="/quote.html">Request a Free Inspection</a>
+        <a class="btn-cinema btn-cinema--outline" href="tel:+18165550149">Call (816) 555-0149</a>
       </div>
     </div>
   </section>
+
 </main>
 
-<footer class="site-footer">
-  <div class="wrap footer-grid">
+<footer class="footer-cinema">
+  <div class="wrap-cinema footer-cinema__top">
     <div>
-      <a class="brand" href="/index.html" style="margin-bottom:1rem;">
-        <img class="brand__mark" src="/images/logo-mark.svg" width="34" height="34" alt="">
-        <span class="brand__name" style="color:#fff;">Fieldstone<small style="color:#9fada9;">Roofing &amp; Exteriors</small></span>
-      </a>
-      <p>Residential roofing contractor serving the Kansas City metro. <strong>Fictional concept business</strong> created for a Soltects portfolio case study — not a real company or offer of services.</p>
+      <p class="footer-cinema__cta-line">Ready when you are.</p>
+      <div class="cluster" style="gap:0.75rem;">
+        <a class="btn-cinema btn-cinema--solid" href="/quote.html">Request an Estimate</a>
+        <a class="btn-cinema btn-cinema--outline" href="tel:+18165550149">Call (816) 555-0149</a>
+      </div>
+      <p style="margin-top:1.5rem; font-size: var(--step--1); color:#8a9893;">Residential roofing contractor serving the Kansas City metro. <strong style="color:#c9d1cd;">Fictional concept business</strong> created for a Soltects portfolio case study — not a real company or offer of services.</p>
     </div>
     <div>
       <h3>Company</h3>
-      <ul><li><a href="/about.html">About</a></li><li><a href="/services/index.html">Services</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/contact.html">Contact</a></li></ul>
+      <ul><li><a href="/about.html">About</a></li><li><a href="/services/index.html" aria-current="page">Services</a></li><li><a href="/faq.html">FAQ</a></li><li><a href="/contact.html">Contact</a></li></ul>
     </div>
     <div>
       <h3>Services</h3>
@@ -176,19 +191,26 @@
       <p style="margin-top:1rem;">(816) 555-0149<br>123 Shawnee Mission Pkwy<br>Overland Park, KS 66204</p>
     </div>
   </div>
-  <div class="wrap footer-bottom">
+  <div class="wrap-cinema footer-cinema__bottom">
     <p>© 2026 Fieldstone Roofing &amp; Exteriors. Concept project by <a href="https://soltects.com" class="link">Soltects</a>.</p>
     <p><a href="/privacy-policy.html">Privacy Policy</a> · <a href="/terms.html">Terms &amp; Conditions</a></p>
   </div>
 </footer>
 
-<div class="call-bar">
-  <div class="call-bar__inner">
-    <a href="tel:+18165550149">Call Now</a>
-    <a href="/quote.html">Free Inspection</a>
+<div class="floating-cta" data-visible="false">
+  <a href="/quote.html"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg> Request an Estimate</a>
+</div>
+
+<div class="cookie-consent" data-visible="false" role="region" aria-label="Cookie consent">
+  <p>Essential local storage only — no tracking. <a class="link" style="color:var(--gold);" href="/privacy-policy.html">Privacy Policy</a></p>
+  <div class="cookie-consent__actions">
+    <button class="btn-cinema btn-cinema--gold" type="button" data-cookie-accept>Accept</button>
+    <button class="btn-cinema btn-cinema--outline" type="button" data-cookie-decline>Decline</button>
   </div>
 </div>
 
-<script src="/js/main.js"></script>
+<script src="/js/vendor/gsap/gsap.min.js"></script>
+<script src="/js/vendor/gsap/ScrollTrigger.min.js"></script>
+<script src="/js/cinematic.js"></script>
 </body>
 </html>

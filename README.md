@@ -3,7 +3,11 @@
 **A self-initiated Soltects portfolio project demonstrating full-service website work for the US
 home-services market** — market research and industry selection, original brand and design
 system, a complete 13-page responsive website, technical SEO, accessibility, and measured
-performance testing, documented end-to-end as a professional case study.
+performance testing, documented end-to-end as a professional case study. A second phase took the
+built site through a full cinematic visual and interaction redesign (animated navigation,
+scroll-triggered reveals, a draggable project gallery, a before/after slider, a multi-step estimate
+flow) across all 13 pages — see `docs/11-cinematic-redesign-plan.md` and
+`docs/12-cinematic-redesign-results.md`.
 
 > **Fieldstone Roofing & Exteriors is a fictional business.** It was created to demonstrate how
 > Soltects researches, designs, and builds a site — not to claim a real client relationship, real
@@ -27,20 +31,28 @@ it up. This line will be updated with the real URL the moment a deployment exist
 | Asset licensing, including a transparently flagged blocked dependency | [`docs/07-asset-licensing.md`](docs/07-asset-licensing.md), [`08-photography-requirements.md`](docs/08-photography-requirements.md) |
 | A pre-approval visual/functional audit that found and fixed 3 real bugs | [`docs/09-production-readiness-audit.md`](docs/09-production-readiness-audit.md) |
 | Deployment plan and status | [`docs/10-deployment.md`](docs/10-deployment.md) |
-| The full narrative case study (also exported as a 7-page PDF) | [`docs/case-study.md`](docs/case-study.md) / [`docs/case-study.pdf`](docs/case-study.pdf) |
+| **Phase 2: full cinematic redesign** — audit, creative direction, and the interaction map | [`docs/11-cinematic-redesign-plan.md`](docs/11-cinematic-redesign-plan.md) |
+| Phase 2 results: bugs found/fixed, Lighthouse scores, verified-interactions table | [`docs/12-cinematic-redesign-results.md`](docs/12-cinematic-redesign-results.md) |
+| The full narrative case study (also exported as a PDF) | [`docs/case-study.md`](docs/case-study.md) / [`docs/case-study.pdf`](docs/case-study.pdf) |
 
 ## Screenshots
 
-39 screenshots across all 13 pages × mobile/tablet/desktop live in [`/screenshots/`](screenshots/).
-A few representative ones:
+**Phase 1** (the original brand/UX build): 39 screenshots across all 13 pages × mobile/tablet/desktop
+in [`/screenshots/`](screenshots/).
+
+**Phase 2** (the cinematic redesign, current site): organized under
+[`docs/screenshots/`](docs/screenshots/) — `pages/` (all 13 redesigned pages, full-page desktop,
+plus homepage mobile/tablet), `interactions/` (nav overlay, gallery, before/after slider, services
+explorer, estimate form, FAQ accordion, cookie consent), and `cinematic-redesign/` (the homepage-
+first milestone shots). A few representative ones:
 
 | Homepage (desktop) | Homepage (mobile) |
 |---|---|
-| ![Homepage desktop](screenshots/home-desktop.png) | ![Homepage mobile](screenshots/home-mobile.png) |
+| ![Homepage desktop](docs/screenshots/pages/home-desktop.png) | ![Homepage mobile](docs/screenshots/pages/home-mobile.png) |
 
-| Storm & insurance claims page | Quote request form |
+| Services hub | Quote request form (4-step) |
 |---|---|
-| ![Storm claims page](screenshots/storm-claims-desktop.png) | ![Quote form](screenshots/quote-desktop.png) |
+| ![Services hub](docs/screenshots/pages/services-desktop.png) | ![Quote form](docs/screenshots/pages/quote-desktop.png) |
 
 ## Demo forms vs. production lead capture
 
@@ -89,7 +101,8 @@ site/                 The actual website (static HTML/CSS/JS, zero build step)
   api/quote.js, contact.js Vercel serverless function versions of the same endpoints
   vercel.json              Deployment config — framework:null, security headers, caching
   .vercelignore            Excludes api/server.js + api/package.json from deployment (local-dev-only; see docs/10-deployment.md)
-screenshots/          39 responsive screenshots (13 pages × 3 breakpoints)
+screenshots/          Phase 1: 39 responsive screenshots (13 pages × 3 breakpoints)
+docs/screenshots/     Phase 2 (cinematic redesign): pages/, interactions/, cinematic-redesign/
 tests/                Link checker, Playwright screenshot capture, Lighthouse-report tooling,
                        and the canonical-domain retargeting script
 ```

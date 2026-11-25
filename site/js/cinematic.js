@@ -199,30 +199,50 @@
     try { existing = window.localStorage.getItem(KEY); } catch (e) { existing = null; }
     if (existing) return;
 
-    // Shown on first scroll, not a flat timer: a fixed-position banner
-    // appearing immediately on load can sit directly over the hero's own
-    // CTA buttons at the bottom of a short viewport (confirmed via
-    // bounding-box overlap testing). Once the user has scrolled at all,
-    // that content has moved out of the viewport-bottom danger zone, so
-    // showing it there is always geometrically safe. A timeout fallback
-    // still covers a visitor who never scrolls (e.g. the whole hero fits
-    // without scrolling) — by then they've had time to act on the hero
-    // CTA first if that's what they came to do.
-    var shown = false;
-    function reveal() {
-      if (shown) return;
-      shown = true;
-      banner.setAttribute("data-visible", "true");
-      window.removeEventListener("scroll", onScroll);
+    // Tied to scroll position, not shown-once-forever: a fixed corner
+    // banner that stays visible regardless of scroll position will
+    // eventually coincide with *something* — a hero CTA, a footer link, a
+    // form field — on some page at some scroll position (confirmed via
+    // bounding-box overlap testing across all 13 pages: a one-way "shown
+    // permanently after first scroll" banner collided with real clickable
+    // elements on 3+ pages once the user scrolled back up). Toggling
+    // visibility with scroll position — exactly like .floating-cta already
+    // does — means it's only ever on screen while the user is scrolled
+    // into body content, never sitting over the hero/intro at the top.
+    // The same corner-collision risk exists at the *bottom* of a short
+    // page (the footer's own links can end up directly under the banner
+    // once scrolled all the way down — found via the same bounding-box
+    // testing, on the 404 page). So visibility also respects a "near the
+    // very bottom" exclusion, not just "near the very top". After 6s,
+    // `forced` lifts the top-of-page gate (for a visitor who never
+    // scrolls, or a page short enough it barely scrolls at all) but the
+    // bottom exclusion still applies even then — there's no scroll
+    // position where showing it is truly unsafe once that's respected.
+    var forced = false;
+    function update() {
+      var scrollRange = document.documentElement.scrollHeight - window.innerHeight;
+      var noRealScroll = scrollRange < 60;
+      if (noRealScroll) {
+        banner.setAttribute("data-visible", forced ? "true" : "false");
+        return;
+      }
+      var pastTop = window.scrollY > 40;
+      var nearBottom = window.scrollY >= scrollRange - 100;
+      var visible = (pastTop || forced) && !nearBottom;
+      banner.setAttribute("data-visible", visible ? "true" : "false");
     }
-    function onScroll() {
-      if (window.scrollY > 40) reveal();
-    }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.setTimeout(reveal, 6000);
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
+    window.setTimeout(function () {
+      forced = true;
+      update();
+    }, 6000);
 
     function choose(value) {
       banner.setAttribute("data-visible", "false");
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
       try { window.localStorage.setItem(KEY, value); } catch (e) { /* ignore: private browsing etc. */ }
     }
     var acceptBtn = banner.querySelector("[data-cookie-accept]");
